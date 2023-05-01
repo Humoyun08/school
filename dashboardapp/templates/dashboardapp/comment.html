@@ -1,0 +1,25 @@
+{% extends 'dashboardapp/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+
+<div class="card my-4">
+    <h5 class="card-header">Leave a Comment:</h5>
+    <div class="card-body">
+      <form method="POST" id = "commentForm">
+        {% csrf_token %}
+        {{form.author}}
+        <br>
+        {{form.body}}
+        <br>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+  </div>
+
+<form method="POST" id = "commentForm">
+    {{form.body}}
+    {% render_field form.author type="text" class="form-control" %}
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+{% endblock %}

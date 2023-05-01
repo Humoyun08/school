@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+  <!-- Page Content -->
+  {% block content %}
+
+<style>
+
+    .like-container{
+        width: 100px;
+        height: auto;
+        padding: 10px 10px 10px 10px;
+        display: flex;
+        align-items:center;
+        justify-content: space-between;
+        flex-direction: column;
+        margin-bottom: 10px;
+
+    }
+
+    .like-container button{
+        background: none;
+        border: none;
+    }
+
+    i{
+      font-size: 22px;
+      cursor: pointer;
+    }
+
+</style>
+
+
+
+
+  <div class="container">
+
+    <div class="row">
+
+      <!-- Post Content Column -->
+      <div class="col-lg-8">
+
+        <!-- Title -->
+        <h1 class="mt-4">{{post.title}}</h1>
+
+        <!-- Author -->
+        <p class="lead">
+          by
+          <a href="#">{{post.user}}</a>
+        </p>
+
+        <hr>
+
+        <!-- Date/Time -->
+        <p>Posted on {{post.created_on}}</p>
+
+        <hr>
+
+        <!-- Preview Image -->
+        <img class="img-fluid rounded" src="{{post.image.url}}" alt="">
+
+        <hr>
+
+        <!-- Post Content -->
+        <p>{{post.body}}</p>
+        <hr>
+
+        
+  
+        
+        <div class="like-container">
+          <p class="num-of-likes" id ="num">{{post.likes.count}}</p>
+
+        {% if msg %}
+
+        <i class="fa-solid fa-heart"></i> 
+        
+        {% else %}
+
+        <i class="fa-regular fa-heart"></i>
+
+        {% endif %}
+
+          
+         
+          
+
+          <small>like</small>
+      </div>
+
+
+
+        <!-- Comments Form -->
+        <div class="card my-4">
+          <h5 class="card-header">Leave a Comment:</h5>
+          <div class="card-body">
+            <form method="POST" id = "commentForm">
+              {% csrf_token %}
+              {{form.author}}
+              <br>
+              {{form.body}}
+              <br>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+          </div>
+        </div>
+       
+        <!-- Single Comment -->
+        {% for comment in comments %}
+        <div class="media mb-4">
+          <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
+          <div class="media-body">
+            <h5 class="mt-0">{{comment.author}}</h5>
+           {{comment.body}}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    
+<script>
+
+
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+const csrftoken = getCookie('csrftoken');
+
+
+
+
+
+  let btn = document.querySelector("i")
+  let num_of_likes = document.getElementById("num")
+  let post_id = "{{post.id}}"
+
+  btn.addEventListener("click", likePost)
+
+  function likePost(e){
+    let url = "{% url 'like' %}"
+    const data = {id:post_id}
+
+    fetch(url, {
+      method: 'POST',
+      headers: {"Content-Type": "application/json",
+      'X-CSRFToken': csrftoken
+    },
+      body : JSON.stringify(data)
+    })
+    .then(res => res.json())
+    .then(data => {
+      console.log(data)
+
+      if(data["check"] == 1){
+        btn.classList.remove("fa-regular")
+        btn.classList.add('fa-solid')
+      }
+
+      else if(data["check"] == 0){
+        btn.classList.add("fa-regular")
+        btn.classList.remove('fa-solid')
+      }
+
+      else{
+        alert("you need to login")
+      }
+
+      num_of_likes.innerHTML = data["num_of_likes"]
+
+
+
+    })
+
+
+  }
+
+</script>
+
+{% endblock %}

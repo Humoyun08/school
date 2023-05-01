@@ -1,0 +1,57 @@
+{% extends 'dashboardapp/base.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% block content %}
+                <div class="col-xl">
+                  <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                      <h5 class="mb-0">Mentor Create</h5>
+                      <small class="text-muted float-end">Ustozlar uchun</small>
+                    </div>
+                    <div class="card-body">
+                      <form method="POST">  
+                        {% csrf_token %}
+                        <div class="mb-3">
+                          <label class="form-label" for="basic-icon-default-fullname">Full Name</label>
+                          <div class="input-group input-group-merge">
+                            <span id="basic-icon-default-fullname2" class="input-group-text"
+                              ><i class="bx bx-user"></i
+                            ></span>
+                            
+                            {% render_field form.full_name type="text" class="form-control" %}
+                          </div>
+                        </div>
+                        <div class="mb-3">
+                          <label class="form-label" for="basic-icon-default-email">Sinfi</label>
+                          <div class="input-group input-group-merge">
+                            <span class="input-group-text"><i class="bx bx-edit-alt"></i></span>
+                            
+                            {% render_field form.sinfi type="text" class="form-control" %}
+                            <span id="basic-icon-default-email2" class="input-group-text">rahbari</span>
+                          </div>
+                          <div class="form-text">Ustozlar uchun</div>
+                        </div>
+                        <div class="mb-3">
+                          <label class="form-label" for="basic-icon-default-phone">Ma'lumoti</label>
+                          <div class="input-group input-group-merge">
+                            <span id="basic-icon-default-phone2" class="input-group-text"
+                              ><i class="bx bx-library"></i
+                            ></span>
+                            {% render_field form.malumoti type="text" class="form-control" %}
+                          </div>
+                        </div>
+                        <div class="mb-3">
+                          <label class="form-label" for="basic-icon-default-message">Fani</label>
+                          <div class="input-group input-group-merge">
+                            <span id="basic-icon-default-message2" class="input-group-text"
+                              ><i class="bx bx-blanket"></i
+                            ></span>
+                            {% render_field form.fani type="text" class="form-control" %}
+                          </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Send</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+{% endblock %}
